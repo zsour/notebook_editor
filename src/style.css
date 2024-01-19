@@ -6,14 +6,15 @@
 
 body {
   text-align: center;
+  background-color: #14151a;
 }
 
 .mainContainer {
   width: 1000px;
   min-height: 100vh;
   display: inline-block;
-  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.25);
   text-align: left;
+  font-family: "Yantramanav", sans-serif;
 }
 
 .buttonContainer {
@@ -27,7 +28,7 @@ body {
 .button {
   width: auto;
   height: 20px;
-  background-color: white;
+  background-color: #1e2129;
   display: inline-block;
   margin-right: 5px;
   cursor: pointer;
@@ -36,6 +37,11 @@ body {
   box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.25);
   padding-left: 5px;
   padding-right: 5px;
+  color: #898c91;
+}
+
+.button:hover {
+  color: #6644aa;
 }
 
 .buttonIcon {
@@ -62,7 +68,7 @@ body {
   width: 100%;
   min-height: 100px;
   height: auto;
-  background-color: lightgray;
+  background-color: #;
   padding: 5px;
   display: block;
 }
@@ -70,7 +76,6 @@ body {
 .category {
   width: 100%;
   height: 40px;
-  border-radius: 5px;
   position: relative;
   user-select: none;
   overflow: hidden;
@@ -81,9 +86,11 @@ body {
 .categoryHeader {
   width: 100%;
   height: 40px;
-  background-color: white;
+  background-color: #1e2129;
   line-height: 40px;
   padding-left: 10px;
+  color: #898c91;
+  cursor: pointer;
 }
 
 .categoryPostsWrapper {
@@ -94,13 +101,38 @@ body {
 .categoryPost {
   width: 100%;
   height: 30px;
-  background-color: white;
+  background-color: #393f4f;
   position: relative;
   line-height: 30px;
   padding-left: 20px;
   margin-top: 4px;
+  color: #c1cddc;
 }
 
 .categoryPostLabel {
+  display: inline-block;
   font-size: 14px;
+  vertical-align: middle;
+}
+
+.categoryHeader:hover {
+  color: #6644aa;
+}
+
+.categoryPostButtons {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.categoryPostPreviewButton,
+.categoryPostEditButton,
+.categoryPostRemoveButton {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #c1cddc;
+  vertical-align: middle;
+  margin-left: 8px;
 }

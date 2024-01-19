@@ -1,9 +1,9 @@
 import "./style.css";
 import {useState} from 'react';
-
+import AddCategoryModal from "./components/AddCategoryModal";
+import { EditorMediatorProvider } from "./components/EditorMediator";
 function App() {
 
-    
   let [data, setData] = useState(
     {
       Math: {extended: false, posts: [{label: "Dijkstras", codeblocks: [{description: "", code: ""}]}]},
@@ -23,9 +23,11 @@ function App() {
     for(let i = 0; i < posts.length; i++){ 
       let tmpPost = (<div key={`${label}:{i}`} className="categoryPost">
           <p className="categoryPostLabel">{posts[i].label}</p>
-          <span className="categoryPostPreviewButton"></span>
-          <span className="categoryPostEditButton"></span>
-          <span className="categoryPostRemoveButton"></span>
+          <div className="categoryPostButtons">
+            <span className="categoryPostPreviewButton"></span>
+            <span className="categoryPostEditButton"></span>
+            <span className="categoryPostRemoveButton"></span>
+          </div>
       </div>);
 
       jsx.push(tmpPost);
@@ -54,32 +56,38 @@ function App() {
   }
 
   return (
-    <div className="content">
-      <div className="mainContainer">
-        <div className="buttonContainer">
-          <span className="button">
-            <span className="buttonIcon"></span>
-            <span className="buttonTitleContainer">
-              <p className="buttonTitle">Add Category</p>
+    <EditorMediatorProvider>
+
+      <div className="content">
+        <div className="mainContainer">
+          <div className="buttonContainer">
+            <span className="button">
+              <span className="buttonTitleContainer">
+                <p className="buttonTitle">Add Category</p>
+              </span>
+              <span className="buttonIcon"></span>
             </span>
-          </span>
 
 
-          <span className="button">
-            <span className="buttonIcon"></span>
-            <span className="buttonTitleContainer">
-              <p className="buttonTitle">Add Post</p>
+            <span className="button">
+              <span className="buttonTitleContainer">
+                <p className="buttonTitle">Add Post</p>
+              </span>
+              <span className="buttonIcon"></span>
             </span>
-          </span>
+          </div>
+
+
+        <div className="categoryContainer">
+            {renderCategories()}
         </div>
 
+        </div>
 
-      <div className="categoryContainer">
-          {renderCategories()}
+        <AddCategoryModal />
       </div>
 
-      </div>
-    </div>
+    </EditorMediatorProvider>
   );
 }
 
