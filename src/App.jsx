@@ -1,7 +1,8 @@
 import "./style.css";
 import {useState} from 'react';
 import AddCategoryModal from "./components/AddCategoryModal";
-import { EditorMediatorProvider } from "./components/EditorMediator";
+import { EditorMediatorProvider, useEditorMediator } from "./components/EditorMediator";
+import ActionButton from "./components/ActionButton";
 function App() {
 
   let [data, setData] = useState(
@@ -55,26 +56,17 @@ function App() {
       return jsx;
   }
 
+
   return (
     <EditorMediatorProvider>
 
       <div className="content">
         <div className="mainContainer">
           <div className="buttonContainer">
-            <span className="button">
-              <span className="buttonTitleContainer">
-                <p className="buttonTitle">Add Category</p>
-              </span>
-              <span className="buttonIcon"></span>
-            </span>
+            
+            <ActionButton label="New Category" action="NEW_CATEGORY"/>
+            <ActionButton label="New Post" />
 
-
-            <span className="button">
-              <span className="buttonTitleContainer">
-                <p className="buttonTitle">Add Post</p>
-              </span>
-              <span className="buttonIcon"></span>
-            </span>
           </div>
 
 

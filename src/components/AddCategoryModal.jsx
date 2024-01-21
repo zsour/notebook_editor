@@ -8,10 +8,16 @@ export default function AddCategoryModal() {
 
   return (
     <div
-      class="addCategoryModalContainer"
+      className="addCategoryModalContainer"
       style={{
         display: em.addCategoryModalOpen ? "block" : "none",
       }}
-    ></div>
+    >
+      <div className="addCategoryModalHiddenCloser" onClick={() => {
+        em.toggleCategoryModal();
+      }}></div>
+
+      <div className="addCategoryFormContainer"></div>
+    </div>
   );
 }

@@ -11,11 +11,16 @@ export const EditorMediatorProvider = ({ children }) => {
     setAddCategoryModalOpen((prev) => !prev);
   }
 
+  let actionButtonActions = {
+    "NEW_CATEGORY": toggleCategoryModal,
+  }
+
   return (
     <EditorMediatorContext.Provider
       value={{
         addCategoryModalOpen,
         toggleCategoryModal,
+        actionButtonActions
       }}
     >
       {children}
