@@ -47,6 +47,8 @@
   text-decoration: none;
   color: #c1cddc;
   margin-top: 5px;
+  font-family: "Yantramanav", sans-serif;
+  padding-top: 1px;
 }
 
 .addCategoryFormButtonContainer {
@@ -68,6 +70,9 @@
   box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s;
   user-select: none;
+  outline: none;
+  border: none;
+  font-family: "Yantramanav", sans-serif;
 }
 
 .addCategoryFormButton:hover {

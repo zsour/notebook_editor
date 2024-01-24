@@ -6,21 +6,29 @@ export const useEditorMediator = () => useContext(EditorMediatorContext);
 
 export const EditorMediatorProvider = ({ children }) => {
   const [addCategoryModalOpen, setAddCategoryModalOpen] = useState(false);
+  const [addPostModalOpen, setAddPostModalOpen] = useState(false);
 
   function toggleCategoryModal() {
     setAddCategoryModalOpen((prev) => !prev);
   }
 
-  let actionButtonActions = {
-    "NEW_CATEGORY": toggleCategoryModal,
+  function togglePostModal() {
+    setAddPostModalOpen((prev) => !prev);
   }
+
+  let actionButtonActions = {
+    NEW_CATEGORY: toggleCategoryModal,
+    NEW_POST: togglePostModal,
+  };
 
   return (
     <EditorMediatorContext.Provider
       value={{
         addCategoryModalOpen,
         toggleCategoryModal,
-        actionButtonActions
+        actionButtonActions,
+        addPostModalOpen,
+        togglePostModal,
       }}
     >
       {children}

@@ -1,0 +1,97 @@
+.postModalContainer {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  display: none;
+  font-family: "Yantramanav", sans-serif;
+}
+
+.postModalHiddenCloser{
+  width: 100%;
+  height: 100%;
+}
+
+.postModalFormContainer{
+  width: 1000px;
+  height: 600px;
+  background-color: #1e2129;
+  display: inline-block;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+}
+
+.postModalFormContainerLeft, .postModalFormContainerRight{
+  height: 100%;
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  padding: 20px;
+  color: #898c91;
+}
+
+.postModalFormContainerLeft{
+  left: 0px;
+  width: 35%;
+}
+
+.postModalFormContainerRight{
+  right: 0px;
+  width: 65%;
+}
+
+.formContainerLabelHeader{
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  user-select: none;
+  font-size: 16px;
+  margin-top: 16px;
+}
+
+.postTitle{
+  width: 100%;
+  height: 30px;
+  padding-left: 10px;
+  background-color: #393f4f;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  color: #c1cddc;
+  margin-top: 5px;
+  padding-top: 1px;
+  display: block;
+  font-family: "Yantramanav", sans-serif;
+}
+
+.postCategorySelect{
+
+  width: 100%;
+  height: 30px;
+  padding-left: 10px;
+  background-color: #393f4f;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  color: #c1cddc;
+  margin-top: 5px;
+  padding-top: 1px;
+  display: block;
+  font-family: "Yantramanav", sans-serif;
+}
+
+.postModalTextArea{
+  width: 100%;
+  height: 500px;
+  padding: 10px;
+  background-color: #393f4f;
+  font-family: "Yantramanav", sans-serif;
+  color: #c1cddc;
+  outline: none;
+  border: none;
+}

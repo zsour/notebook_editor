@@ -13,29 +13,45 @@ export default function AddCategoryModal() {
         display: em.addCategoryModalOpen ? "block" : "none",
       }}
     >
-      <div className="addCategoryModalHiddenCloser" onClick={() => {
-        em.toggleCategoryModal();
-      }}></div>
+      <div
+        className="addCategoryModalHiddenCloser"
+        onClick={() => {
+          em.toggleCategoryModal();
+        }}
+      ></div>
 
       <div className="addCategoryFormContainer">
-        <form onSubmit={(e) => {e.preventDefault()}}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <div className="addCategoryFormHeaderContainer">
             <b className="addCategoryFormHeader">Add new category</b>
           </div>
-          
+
           <div className="addCategoryFormHeaderContainer">
             <p className="addCategoryFormHeader">Category label:</p>
           </div>
-          <input type="text" value={label} className="addCategoryFormInput" onChange={(e) => {setLabel(e.target.value)}} />
+          <input
+            type="text"
+            value={label}
+            className="addCategoryFormInput"
+            onChange={(e) => {
+              setLabel(e.target.value);
+            }}
+          />
           <div className="addCategoryFormButtonContainer">
-            <div className="addCategoryFormButton" onClick={() => {
-              //Add new category.
-              setLabel("");
-              em.toggleCategoryModal();
-            }}>
-
+            <button
+              className="addCategoryFormButton"
+              onClick={() => {
+                //Add new category.
+                setLabel("");
+                em.toggleCategoryModal();
+              }}
+            >
               <p>Save</p>
-            </div>
+            </button>
           </div>
         </form>
       </div>
