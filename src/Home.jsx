@@ -1,13 +1,13 @@
-import "./style.css";
+import "./components/style/categories.css";
+
 import { useState } from "react";
-import AddCategoryModal from "./components/AddCategoryModal";
+
 import {
   EditorMediatorProvider,
   useEditorMediator,
 } from "./components/EditorMediator";
-import ActionButton from "./components/ActionButton";
-import AddPostModal from "./components/AddPostModal";
-function App() {
+
+function Home() {
   let [data, setData] = useState({
     Math: {
       extended: false,
@@ -75,23 +75,7 @@ function App() {
     return jsx;
   }
 
-  return (
-    <EditorMediatorProvider>
-      <div className="content">
-        <div className="mainContainer">
-          <div className="buttonContainer">
-            <ActionButton label="New Category" action="NEW_CATEGORY" />
-            <ActionButton label="New Post" action="NEW_POST" />
-          </div>
-
-          <div className="categoryContainer">{renderCategories()}</div>
-        </div>
-
-        <AddCategoryModal />
-        <AddPostModal />
-      </div>
-    </EditorMediatorProvider>
-  );
+  return <div className="categoryContainer">{renderCategories()}</div>;
 }
 
-export default App;
+export default Home;
