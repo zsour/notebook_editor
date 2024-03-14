@@ -44,7 +44,7 @@ function AddCategory() {
           <option value="1">Graph</option>
         </select>
 
-        <div className="buttonContainer">
+        <div className="submitButtonContainer">
           <button className="submitButton">
             <p>Add category</p>
           </button>

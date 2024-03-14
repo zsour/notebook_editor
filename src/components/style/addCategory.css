@@ -1,22 +1,23 @@
-.addCategoryContainer{
+.addCategoryContainer {
   width: 100%;
   min-height: 40px;
-  position: relative; 
+  position: relative;
   padding: 10px;
   padding-left: 40px;
   padding-right: 40px;
 }
 
-.addCategoryForm{
+.addCategoryForm {
   padding-top: 10px;
 }
 
-.addCategoryInput, #addCategorySelect{  
+.addCategoryInput,
+#addCategorySelect {
   width: 100%;
   height: 30px;
   line-height: 30px;
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
   padding-left: 5px;
   border: none;
   margin-bottom: 20px;
@@ -25,17 +26,19 @@
   font-family: "Yantramanav", sans-serif;
 }
 
-.addCategoryInput:focus, .addCategoryInput:active{
+.addCategoryInput:focus,
+.addCategoryInput:active {
   border: none;
   outline: none;
 }
 
-#addCategorySelect:focus, #addCategorySelect:active{
+#addCategorySelect:focus,
+#addCategorySelect:active {
   border: none;
   outline: none;
 }
 
-.labelContainer{
+.labelContainer {
   height: 20px;
   line-height: 20px;
   margin-bottom: 5px;
@@ -44,4 +47,37 @@
 .labelContainer p {
   font-size: 14px;
   color: #c1cddc;
+}
+
+.submitButtonContainer {
+  width: 100%;
+  height: 30px;
+  position: relative;
+}
+
+.submitButton {
+  width: 110px;
+  height: 30px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  user-select: none;
+  font-family: "Yantramanav", sans-serif;
+  font-size: 14px;
+  background-color: #6644aa;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #c1cddc;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s;
+  margin-top: 25px;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+}
+
+.submitButton:active {
+  transform: translateY(-1px);
 }
