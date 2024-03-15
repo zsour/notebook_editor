@@ -6,6 +6,8 @@ import { EditorMediatorProvider } from "./components/EditorMediator";
 import "./style.css";
 
 import AddCategory from "./components/AddCategory";
+import AddPost from "./components/AddPost";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,7 +21,7 @@ const router = createBrowserRouter([
 
   {
     path: "/addPost",
-    element: <div>add post</div>,
+    element: <AddPost />,
   },
 ]);
 
