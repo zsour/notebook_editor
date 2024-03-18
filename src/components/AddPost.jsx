@@ -1,12 +1,35 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import "./style/addPost.css";
+import { Editor, useMonaco } from "@monaco-editor/react";
 
 function AddPost() {
   const [postTitle, setPostTitle] = useState("");
 
   const initialState = { desc: "", code: "", extended: true };
 
+  const monaco = useMonaco();
+
   const [codeblocks, dispatch] = useReducer(reducer, []);
+
+  useEffect(() => {
+    if (monaco) {
+      monaco.editor.defineTheme("arta", {
+        base: "vs-dark",
+        inherit: "true",
+        rules: [
+          { token: "identifier", foreground: "#aaaaaa" },
+          { token: "keyword", foreground: "#6644aa" },
+          { token: "string", foreground: "#ffcc33" },
+          { token: "comment", foreground: "#444444" },
+          { token: "type", foreground: "#bb1166" },
+        ],
+        colors: {
+          "editor.background": "#1e2129",
+        },
+      });
+      monaco.editor.setTheme("arta");
+    }
+  }, [monaco]);
 
   function reducer(current, action) {
     switch (action.type) {
@@ -91,17 +114,34 @@ function AddPost() {
             }}
           ></textarea>
 
-          <textarea
+          <Editor
             className="codeblockCode"
+            defaultLanguage="javascript"
+            height="500px"
+            theme="arta"
+            options={{
+              minimap: {
+                enabled: false,
+              },
+              padding: {
+                top: 10,
+              },
+
+              lineNumbersMinChars: 2,
+
+              bracketPairColorization: {
+                enabled: true,
+              },
+            }}
             value={codeblocks[i].code}
-            onChange={(e) => {
+            onChange={(val) => {
               dispatch({
                 type: "UPDATE_CODE",
                 codeblockIndex: i,
-                value: e.target.value,
+                value: val,
               });
             }}
-          ></textarea>
+          />
         </div>,
       );
     }
