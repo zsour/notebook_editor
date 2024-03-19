@@ -21,48 +21,8 @@ body {
   width: 100%;
   height: 40px;
   border-botttom: 1px solid black;
-  padding-top: 16px;
+  padding-top: 20px;
 }
-
-.button {
-  width: auto;
-  height: 20px;
-  background-color: #1e2129;
-  display: inline-block;
-  margin-right: 5px;
-  cursor: pointer;
-  user-select: none;
-  vertical-align: top;
-  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.25);
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #898c91;
-}
-
-.button:hover {
-  color: #6644aa;
-}
-
-.buttonIcon {
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-  margin-right: 2px;
-  vertical-align: middle;
-}
-
-.buttonTitleContainer {
-  height: 20px;
-  line-height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.buttonTitle {
-  display: inline-block;
-  font-size: 14px;
-}
-
 
 .navButton{
   display: inline-block;
@@ -79,3 +39,4 @@ body {
   font-size: 14px;
   color: #c1cddc;
 }
+

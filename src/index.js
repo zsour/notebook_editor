@@ -27,26 +27,24 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <EditorMediatorProvider>
-      <div className="content">
-        <div className="mainContainer">
-          <div className="buttonContainer">
-            <a className="navButton" href="/">
-              <p>Home</p>
-            </a>
+  <EditorMediatorProvider>
+    <div className="content">
+      <div className="mainContainer">
+        <div className="buttonContainer">
+          <a className="navButton" href="/">
+            <p>Home</p>
+          </a>
 
-            <a className="navButton" href="/addCategory">
-              <p>Add Category</p>
-            </a>
+          <a className="navButton" href="/addCategory">
+            <p>Add Category</p>
+          </a>
 
-            <a className="navButton" href="/addPost">
-              <p>Add Post</p>
-            </a>
-          </div>
-          <RouterProvider router={router} />
+          <a className="navButton" href="/addPost">
+            <p>Add Post</p>
+          </a>
         </div>
+        <RouterProvider router={router} />
       </div>
-    </EditorMediatorProvider>
-  </React.StrictMode>,
+    </div>
+  </EditorMediatorProvider>,
 );

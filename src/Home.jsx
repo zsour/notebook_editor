@@ -1,6 +1,5 @@
-import "./components/style/categories.css";
-
 import { useState } from "react";
+import "./components/style/home.css";
 
 import {
   EditorMediatorProvider,
@@ -8,68 +7,53 @@ import {
 } from "./components/EditorMediator";
 
 function Home() {
-  let [data, setData] = useState({
-    Math: {
-      extended: false,
-      posts: [
-        { label: "Dijkstras", codeblocks: [{ description: "", code: "" }] },
-      ],
-    },
-    Graph: {
-      extended: false,
-      posts: [{ label: "Test", codeblocks: [{ description: "", code: "" }] }],
-    },
-  });
+  let [categories, setCategories] = useState([
+    { title: "Linear Algebra", posts: [], extended: false },
+    { title: "Graph", posts: [], extended: false },
+  ]);
 
-  function toggleExtend(label) {
-    let tmp = { ...data };
-    tmp[label].extended = !tmp[label].extended;
-    setData({ ...tmp });
-  }
-
-  function generateCategory(label, posts) {
-    let jsx = [];
-
-    for (let i = 0; i < posts.length; i++) {
-      let tmpPost = (
-        <div key={`${label}:{i}`} className="categoryPost">
-          <p className="categoryPostLabel">{posts[i].label}</p>
-          <div className="categoryPostButtons">
-            <span className="categoryPostPreviewButton"></span>
-            <span className="categoryPostEditButton"></span>
-            <span className="categoryPostRemoveButton"></span>
-          </div>
-        </div>
-      );
-
-      jsx.push(tmpPost);
-    }
-
-    return (
-      <div
-        key={label}
-        className="category"
-        style={{
-          height: data[label].extended ? `${34 * posts.length + 40}px` : "40px",
-        }}
-      >
-        <div
-          className="categoryHeader"
-          onClick={() => {
-            toggleExtend(label);
-          }}
-        >
-          <p className="categoryTitle">{label}</p>
-        </div>
-        <div className="categoryPostsWrapper">{jsx}</div>
-      </div>
-    );
+  function setExtended(index, value) {
+    let tmp = [...categories];
+    tmp[index].extended = value;
+    setCategories([...tmp]);
   }
 
   function renderCategories() {
     let jsx = [];
-    for (let key in data) {
-      jsx.push(generateCategory(key, data[key].posts));
+    for (let i = 0; i < categories.length; i++) {
+      jsx.push(
+        <div
+          className="category"
+          style={{
+            height: categories[i].extended ? "400px" : "30px",
+          }}
+        >
+          <div className="categoryHeader">
+            <p className="categoryTitle">{categories[i].title}</p>
+            <span
+              className="categoryExtendButton"
+              onClick={() => {
+                setExtended(i, !categories[i].extended);
+              }}
+              style={{
+                transform: categories[i].extended
+                  ? "translateY(-50%) rotate(90deg)"
+                  : "translateY(-50%)",
+              }}
+            ></span>
+
+            <span className="categoryRemoveButton"></span>
+          </div>
+
+          <div className="categoryPostContainer">
+            <div className="categoryPost">
+              <p className="categoryPostTitle">Depth first search</p>
+              <span className="categoryPostRemoveButton"></span>
+              <span className="categoryPostEditButton"></span>
+            </div>
+          </div>
+        </div>,
+      );
     }
 
     return jsx;

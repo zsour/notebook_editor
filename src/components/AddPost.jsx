@@ -8,7 +8,6 @@ function AddPost() {
   const initialState = { desc: "", code: "", extended: true };
 
   const monaco = useMonaco();
-
   const [codeblocks, dispatch] = useReducer(reducer, []);
 
   useEffect(() => {
