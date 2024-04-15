@@ -13,23 +13,33 @@ export const EditorMediatorProvider = ({ children }) => {
   }, []);
 
   async function addCategory(name, parent) {
-    return new Promise((resolve, reject) => {
-      if (name in posts) {
-        reject("Category already exists.");
-      } else {
-        setPosts((prev) => {
-          let tmp = parent;
-          if (tmp === "-1") {
-            tmp = undefined;
-          }
-          prev[name] = { parent: tmp, posts: [] };
-          return { ...prev };
-        });
+    return new Promise(async (resolve, reject) => {
+      let result = await fetch("http://localhost:3001/addCategory", {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          parent,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
 
-        // TODO: save file
+      if (result.status === 400) {
+        let message = "";
+        await result
+          .json()
+          .then((data) => {
+            message = data.message;
+          })
+          .catch(() => {
+            message = "Something went wrong.";
+          });
 
-        resolve();
+        reject(message);
       }
+
+      resolve("Category created.");
     });
   }
 

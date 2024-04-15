@@ -15,8 +15,8 @@ function AddCategory() {
         onSubmit={(e) => {
           e.preventDefault();
           em.addCategory(categoryName, parentCategory)
-            .then(() => {
-              console.log("Category created.");
+            .then((message) => {
+              console.log(message);
             })
             .catch((error) => {
               console.log(error);
