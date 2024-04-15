@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./style/addCategory.css";
+import { useEditorMediator } from "./EditorMediator";
 
 function AddCategory() {
   const [categoryName, setCategoryName] = useState("");
   const [parentCategory, setParentCategory] = useState("-1");
+
+  const em = useEditorMediator();
 
   return (
     <div className="addCategoryContainer">
@@ -11,7 +14,13 @@ function AddCategory() {
         className="addCategoryForm"
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(categoryName, parentCategory);
+          em.addCategory(categoryName, parentCategory)
+            .then(() => {
+              console.log("Category created.");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }}
       >
         <div className="labelContainer">
@@ -40,8 +49,8 @@ function AddCategory() {
           id="addCategorySelect"
         >
           <option value="-1">None</option>
-          <option value="0">Math</option>
-          <option value="1">Graph</option>
+          <option value="Math">Math</option>
+          <option value="Graph">Graph</option>
         </select>
 
         <div className="submitButtonContainer">
