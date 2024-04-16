@@ -43,10 +43,69 @@ export const EditorMediatorProvider = ({ children }) => {
     });
   }
 
+  function addPost(title, parent, codeblocks) {
+    return new Promise(async (resolve, reject) => {
+      codeblocks = JSON.stringify(codeblocks);
+      let result = await fetch("http://localhost:3001/post/add", {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          parent,
+          codeblocks,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (result.status == 400) {
+        let message = "";
+        await result
+          .json()
+          .then((data) => {
+            message = data.message;
+          })
+          .catch(() => {
+            message = "Something went wrong.";
+          });
+
+        reject(message);
+      }
+
+      resolve("Post created.");
+    });
+  }
+
+  function getCategories() {
+    return new Promise(async (resolve, reject) => {
+      let result = await fetch("http://localhost:3001/category/fetch", {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (result.status === 400) {
+        reject("Can't fetch categories.");
+      }
+
+      result
+        .json()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((_) => {
+          reject("Can't parse categories.");
+        });
+    });
+  }
+
   return (
     <EditorMediatorContext.Provider
       value={{
         addCategory,
+        addPost,
+        getCategories,
       }}
     >
       {children}

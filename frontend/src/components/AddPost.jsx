@@ -1,14 +1,23 @@
 import React, { useState, useReducer, useEffect } from "react";
 import "./style/addPost.css";
 import { Editor, useMonaco } from "@monaco-editor/react";
+import { useEditorMediator } from "./EditorMediator";
 
 function AddPost() {
+  const [loading, setLoading] = useState(true);
+
   const [postTitle, setPostTitle] = useState("");
+
+  const [parent, setParent] = useState("0");
 
   const initialState = { desc: "", code: "", extended: true };
 
+  const [categories, setCategories] = useState([]);
+
   const monaco = useMonaco();
   const [codeblocks, dispatch] = useReducer(reducer, []);
+
+  const em = useEditorMediator();
 
   useEffect(() => {
     if (monaco) {
@@ -29,6 +38,21 @@ function AddPost() {
       monaco.editor.setTheme("arta");
     }
   }, [monaco]);
+
+  useEffect(() => {
+    setLoading(true);
+    if (em) {
+      em.getCategories()
+        .then((data) => {
+          setCategories([...data]);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    }
+  }, [em]);
 
   function reducer(current, action) {
     switch (action.type) {
@@ -58,6 +82,10 @@ function AddPost() {
         let tmp = [...current];
         tmp[action.codeblockIndex].extended = action.value;
         return [...tmp];
+      }
+
+      case "RESET": {
+        return [];
       }
 
       default:
@@ -148,56 +176,103 @@ function AddPost() {
     return jsx;
   }
 
-  return (
-    <div className="addPostContainer">
-      <div className="addPostButtonContainer">
-        <button
-          className="addPostButtonContainerButton"
-          onClick={() => {
-            dispatch({ type: "CREATE_CODEBLOCK" });
-          }}
-        >
-          <p>Add code block</p>
-        </button>
-      </div>
+  function renderParentOptions() {
+    let jsx = [];
 
-      <form
-        className="postForm"
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <div className="postFormLabel">
-          <p>Post title</p>
+    for (let i = 0; i < categories.length; i++) {
+      jsx.push(
+        <option key={`parent_option_${i}`} value={categories[i].ID}>
+          {categories[i].name}
+        </option>,
+      );
+    }
+
+    return jsx;
+  }
+
+  function renderPage() {
+    if (loading) {
+      return (
+        <div className="addPostContainer">
+          <div className="loading">
+            <p>Loading...</p>
+          </div>
         </div>
-        <input
-          type="text"
-          value={postTitle}
-          className="postTitleInput"
-          onChange={(e) => {
-            setPostTitle(e.target.value);
-          }}
-          placeholder="Title..."
-        />
+      );
+    }
 
-        <div className="postFormLabel">
-          <p>Post category</p>
-        </div>
-
-        <select className="postCategorySelect">
-          <option value="0">Math</option>
-          <option value="1">Graph</option>
-        </select>
-        <div className="codeblockContainer">{renderCodeblocks()}</div>
-
-        <div className="addPostFormButtonContainer">
-          <button className="addPostFormSubmitButton">
-            <p>Add post</p>
+    return (
+      <div className="addPostContainer">
+        <div className="addPostButtonContainer">
+          <button
+            className="addPostButtonContainerButton"
+            onClick={() => {
+              dispatch({ type: "CREATE_CODEBLOCK" });
+            }}
+          >
+            <p>Add code block</p>
           </button>
         </div>
-      </form>
-    </div>
-  );
+
+        <form
+          className="postForm"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setLoading(true);
+            em.addPost(postTitle, parent, codeblocks)
+              .then((message) => {
+                console.log(message);
+                setPostTitle("");
+                setParent("0");
+                dispatch({ type: "RESET" });
+                setLoading(false);
+              })
+              .catch((err) => {
+                console.log(err);
+                setLoading(false);
+              });
+          }}
+        >
+          <div className="postFormLabel">
+            <p>Post title</p>
+          </div>
+          <input
+            type="text"
+            value={postTitle}
+            className="postTitleInput"
+            onChange={(e) => {
+              setPostTitle(e.target.value);
+            }}
+            placeholder="Title..."
+          />
+
+          <div className="postFormLabel">
+            <p>Post category</p>
+          </div>
+
+          <select
+            className="postCategorySelect"
+            value={parent}
+            onChange={(e) => {
+              setParent(e.target.value);
+            }}
+          >
+            <option value="0">None</option>
+            {renderParentOptions()}
+          </select>
+          <div className="codeblockContainer">{renderCodeblocks()}</div>
+
+          <div className="addPostFormButtonContainer">
+            <button className="addPostFormSubmitButton">
+              <p>Add post</p>
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
+  return renderPage();
 }
 
 export default AddPost;
