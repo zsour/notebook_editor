@@ -14,89 +14,101 @@ export const EditorMediatorProvider = ({ children }) => {
 
   async function addCategory(name, parent) {
     return new Promise(async (resolve, reject) => {
-      let result = await fetch("http://localhost:3001/addCategory", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          parent,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
+      try {
+        let result = await fetch("http://localhost:3001/addCategory", {
+          method: "POST",
+          body: JSON.stringify({
+            name,
+            parent,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
 
-      if (result.status === 400) {
-        let message = "";
-        await result
-          .json()
-          .then((data) => {
-            message = data.message;
-          })
-          .catch(() => {
-            message = "Something went wrong.";
-          });
+        if (result.status === 400) {
+          let message = "";
+          await result
+            .json()
+            .then((data) => {
+              message = data.message;
+            })
+            .catch(() => {
+              message = "Failed to parse error.";
+            });
 
-        reject(message);
+          reject(message);
+        }
+
+        resolve("Category created.");
+      } catch (err) {
+        reject("Failed to create category.");
       }
-
-      resolve("Category created.");
     });
   }
 
   function addPost(title, parent, codeblocks) {
     return new Promise(async (resolve, reject) => {
-      codeblocks = JSON.stringify(codeblocks);
-      let result = await fetch("http://localhost:3001/post/add", {
-        method: "POST",
-        body: JSON.stringify({
-          title,
-          parent,
-          codeblocks,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
+      try {
+        codeblocks = JSON.stringify(codeblocks);
+        let result = await fetch("http://localhost:3001/post/add", {
+          method: "POST",
+          body: JSON.stringify({
+            title,
+            parent,
+            codeblocks,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
 
-      if (result.status == 400) {
-        let message = "";
-        await result
-          .json()
-          .then((data) => {
-            message = data.message;
-          })
-          .catch(() => {
-            message = "Something went wrong.";
-          });
+        if (result.status === 400) {
+          let message = "";
+          await result
+            .json()
+            .then((data) => {
+              message = data.message;
+            })
+            .catch(() => {
+              message = "Failed to parse error.";
+            });
 
-        reject(message);
+          reject(message);
+        }
+
+        resolve("Post created.");
+      } catch (err) {
+        reject("Failed to create post.");
       }
-
-      resolve("Post created.");
     });
   }
 
   function getCategories() {
     return new Promise(async (resolve, reject) => {
-      let result = await fetch("http://localhost:3001/category/fetch", {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-
-      if (result.status === 400) {
-        reject("Can't fetch categories.");
-      }
-
-      result
-        .json()
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((_) => {
-          reject("Can't parse categories.");
+      try {
+        let result = await fetch("http://localhost:3001/category/fetch", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
         });
+
+        if (result.status === 400) {
+          reject("Can't fetch categories.");
+        }
+
+        result
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((_) => {
+            reject("Can't parse categories.");
+          });
+      } catch (err) {
+        reject("Failed to fetch categories.");
+      }
     });
   }
 
