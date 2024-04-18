@@ -112,12 +112,41 @@ export const EditorMediatorProvider = ({ children }) => {
     });
   }
 
+  function getPosts() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await fetch("http://localhost:3001/post", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+
+        if (result.status === 400) {
+          reject("Can't fetch posts.");
+        }
+
+        result
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((_) => {
+            reject("Can't parse posts.");
+          });
+      } catch (err) {
+        reject("Failed to fetch posts.");
+      }
+    });
+  }
+
   return (
     <EditorMediatorContext.Provider
       value={{
         addCategory,
         addPost,
         getCategories,
+        getPosts,
       }}
     >
       {children}

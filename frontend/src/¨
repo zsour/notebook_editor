@@ -12,8 +12,6 @@ function Home() {
   let [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    setPostFetched(false);
-    setLoading(true);
     if (em) {
       em.getCategories()
         .then((data) => {
@@ -26,6 +24,7 @@ function Home() {
           });
           let lookup = {};
           for (let i = 0; i < data.length; i++) {
+            data[i].extended = false;
             data[i].posts = [];
             lookup[data[i].ID] = i;
           }
@@ -70,40 +69,51 @@ function Home() {
     }
   }, [categories, postsFetched, em, parentLookup]);
 
+  function setExtended(index, value) {
+    let tmp = [...categories];
+    tmp[index].extended = value;
+    setCategories([...tmp]);
+  }
+
   function renderCategories() {
     let jsx = [];
     for (let i = 0; i < categories.length; i++) {
-      console.log("yo");
       jsx.push(
-        <div key={`category_${i}`} className="category">
+        <div
+          key={`category_${i}`}
+          className="category"
+          style={{
+            height: categories[i].extended ? "400px" : "30px",
+          }}
+        >
           <div className="categoryHeader">
             <p className="categoryTitle">{categories[i].name}</p>
+            <span
+              className="categoryExtendButton"
+              onClick={() => {
+                setExtended(i, !categories[i].extended);
+              }}
+              style={{
+                transform: categories[i].extended
+                  ? "translateY(-50%) rotate(90deg)"
+                  : "translateY(-50%)",
+              }}
+            ></span>
 
             <span className="categoryRemoveButton"></span>
-            <span className="categoryEditButton"></span>
           </div>
 
           <div className="categoryPostContainer">
-            {renderPosts(categories[i].posts)}
+            <div className="categoryPost">
+              <p className="categoryPostTitle">Depth first search</p>
+              <span className="categoryPostRemoveButton"></span>
+              <span className="categoryPostEditButton"></span>
+            </div>
           </div>
         </div>,
       );
     }
 
-    return jsx;
-  }
-
-  function renderPosts(posts) {
-    let jsx = [];
-    for (let i = 0; i < posts.length; i++) {
-      jsx.push(
-        <div className="categoryPost">
-          <p className="categoryPostTitle">{posts[i].title}</p>
-          <span className="categoryPostRemoveButton"></span>
-          <span className="categoryPostEditButton"></span>
-        </div>,
-      );
-    }
     return jsx;
   }
 
@@ -121,7 +131,7 @@ function Home() {
     return <div className="categoryContainer">{renderCategories()}</div>;
   }
 
-  return <>{renderPage()}</>;
+  return {renderPage()};
 }
 
 export default Home;

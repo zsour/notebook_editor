@@ -26,4 +26,20 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    if (req.query.id) {
+      let result = await conn.query(
+        `SELECT * FROM post WHERE ID=${req.query.id}`,
+      );
+      res.json(result[0]);
+    } else {
+      let result = await conn.query(`SELECT * FROM post`);
+      res.json(result[0]);
+    }
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+
 module.exports = router;
