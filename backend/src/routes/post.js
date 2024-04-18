@@ -3,7 +3,7 @@ const router = express.Router();
 
 const conn = require("../db.js");
 
-router.post("/add", async (req, res) => {
+router.post("/", async (req, res) => {
   let obj = req.body;
   try {
     let date = new Date();
