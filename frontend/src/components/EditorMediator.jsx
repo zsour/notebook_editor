@@ -15,7 +15,7 @@ export const EditorMediatorProvider = ({ children }) => {
   async function addCategory(name, parent) {
     return new Promise(async (resolve, reject) => {
       try {
-        let result = await fetch("http://localhost:3001/addCategory", {
+        let result = await fetch("http://localhost:3001/category", {
           method: "POST",
           body: JSON.stringify({
             name,
@@ -51,7 +51,7 @@ export const EditorMediatorProvider = ({ children }) => {
     return new Promise(async (resolve, reject) => {
       try {
         codeblocks = JSON.stringify(codeblocks);
-        let result = await fetch("http://localhost:3001/post/add", {
+        let result = await fetch("http://localhost:3001/post", {
           method: "POST",
           body: JSON.stringify({
             title,
@@ -87,7 +87,7 @@ export const EditorMediatorProvider = ({ children }) => {
   function getCategories() {
     return new Promise(async (resolve, reject) => {
       try {
-        let result = await fetch("http://localhost:3001/category/fetch", {
+        let result = await fetch("http://localhost:3001/category", {
           method: "GET",
           headers: {
             "Content-type": "application/json; charset=UTF-8",

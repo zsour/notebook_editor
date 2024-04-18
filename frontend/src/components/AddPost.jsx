@@ -44,6 +44,14 @@ function AddPost() {
     if (em) {
       em.getCategories()
         .then((data) => {
+          data.sort((a, b) => {
+            if (a.name > b.name) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+
           setCategories([...data]);
           setLoading(false);
         })
