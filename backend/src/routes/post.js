@@ -42,4 +42,33 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.put("/", async (req, res) => {
+  let obj = req.body;
+  try {
+    if (obj.title == "") {
+      throw "Can't edit a post without a title.";
+    }
+    if (obj.id == "") {
+      throw "Can't edit a post without its id.";
+    }
+
+    let date = new Date();
+    date = date.toISOString().slice(0, 19).replace("T", " ");
+
+    let id = conn.escape(obj.id);
+    let title = conn.escape(obj.title);
+    let codeblocks = conn.escape(obj.codeblocks);
+    let parent = conn.escape(obj.parent);
+
+    let sql = `UPDATE post SET codeblocks=${codeblocks}, edited='${date}', parent=${parent}, title=${title} WHERE ID=${id}`;
+    let result = await conn.query(sql).catch(() => {
+      throw "Post could not be edited.";
+    });
+
+    res.send(result[0]);
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+
 module.exports = router;

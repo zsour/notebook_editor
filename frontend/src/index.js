@@ -7,6 +7,8 @@ import "./style.css";
 
 import AddCategory from "./components/AddCategory";
 import AddPost from "./components/AddPost";
+import EditPost from "./components/EditPost";
+import EditCategory from "./components/EditCategory";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,16 @@ const router = createBrowserRouter([
   {
     path: "/addPost",
     element: <AddPost />,
+  },
+
+  {
+    path: "/editPost/:id",
+    element: <EditPost />,
+  },
+
+  {
+    path: "/editCategory/:id",
+    element: <EditCategory />,
   },
 ]);
 

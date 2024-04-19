@@ -73,14 +73,15 @@ function Home() {
   function renderCategories() {
     let jsx = [];
     for (let i = 0; i < categories.length; i++) {
-      console.log("yo");
       jsx.push(
         <div key={`category_${i}`} className="category">
           <div className="categoryHeader">
             <p className="categoryTitle">{categories[i].name}</p>
 
             <span className="categoryRemoveButton"></span>
-            <span className="categoryEditButton"></span>
+            <a href={`./editCategory/${categories[i].ID}`}>
+              <span className="categoryEditButton"></span>
+            </a>
           </div>
 
           <div className="categoryPostContainer">
@@ -97,10 +98,12 @@ function Home() {
     let jsx = [];
     for (let i = 0; i < posts.length; i++) {
       jsx.push(
-        <div className="categoryPost">
+        <div key={`post_${posts[i].ID}`} className="categoryPost">
           <p className="categoryPostTitle">{posts[i].title}</p>
           <span className="categoryPostRemoveButton"></span>
-          <span className="categoryPostEditButton"></span>
+          <a href={`./editPost/${posts[i].ID}`}>
+            <span className="categoryPostEditButton"></span>
+          </a>
         </div>,
       );
     }

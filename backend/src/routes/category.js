@@ -38,13 +38,61 @@ router.get("/", async (req, res) => {
   try {
     if (req.query.id) {
       let result = await conn.query(
-        `SELECT * FROM category WHERE ID=${req.query.id}`,
+        `SELECT * FROM category WHERE ID=${conn.escape(req.query.id)}`,
       );
       res.json(result[0]);
     } else {
       let result = await conn.query(`SELECT * FROM category`);
       res.json(result[0]);
     }
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+
+router.put("/", async (req, res) => {
+  try {
+    let obj = req.body;
+
+    if (obj.id == "") {
+      throw "Can't edit a category without its id.";
+    }
+
+    if (obj.name == "") {
+      throw "Can't edit a category without a name.";
+    }
+
+    let id = conn.escape(obj.id);
+    let name = conn.escape(obj.name);
+    let parent = conn.escape(obj.parent);
+
+    if (parent == id) {
+      throw "A category can't be its own parent.";
+    }
+
+    let nameFetch = await conn.query(
+      `SELECT * FROM category WHERE name=${name}`,
+    );
+
+    if (nameFetch[0].length > 0) {
+      for (let i = 0; i < nameFetch[0].length; i++) {
+        let tmp = `'${nameFetch[0][i].ID}'`;
+        if (tmp != id) {
+          throw "A category with that name already exist.";
+        }
+      }
+    }
+
+    let date = new Date();
+    date = date.toISOString().slice(0, 19).replace("T", " ");
+
+    let sql = `UPDATE category SET name = ${name}, parent = ${parent}, edited = '${date}' WHERE ID = ${id}`;
+    let result = await conn.query(sql).catch((err) => {
+      console.log(err);
+      throw "Category could not be edited.";
+    });
+
+    res.json(result[0]);
   } catch (err) {
     res.status(400).json({ message: err });
   }

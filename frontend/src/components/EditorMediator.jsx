@@ -12,7 +12,7 @@ export const EditorMediatorProvider = ({ children }) => {
     setPosts({});
   }, []);
 
-  async function addCategory(name, parent) {
+  function addCategory(name, parent) {
     return new Promise(async (resolve, reject) => {
       try {
         let result = await fetch("http://localhost:3001/category", {
@@ -84,6 +84,34 @@ export const EditorMediatorProvider = ({ children }) => {
     });
   }
 
+  function getCategoryById(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await fetch(`http://localhost:3001/category?id=${id}`, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+
+        if (result.status === 400) {
+          reject("Can't fetch category.");
+        }
+
+        result
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((_) => {
+            reject("Can't parse category.");
+          });
+      } catch (err) {
+        reject("Failed to fetch category.");
+      }
+    });
+  }
+
   function getCategories() {
     return new Promise(async (resolve, reject) => {
       try {
@@ -108,6 +136,34 @@ export const EditorMediatorProvider = ({ children }) => {
           });
       } catch (err) {
         reject("Failed to fetch categories.");
+      }
+    });
+  }
+
+  function getPostById(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await fetch(`http://localhost:3001/post?id=${id}`, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+
+        if (result.status === 400) {
+          reject("Can't fetch post.");
+        }
+
+        result
+          .json()
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((_) => {
+            reject("Can't parse post.");
+          });
+      } catch (err) {
+        reject("Failed to fetch post.");
       }
     });
   }
@@ -140,13 +196,92 @@ export const EditorMediatorProvider = ({ children }) => {
     });
   }
 
+  function editCategory(id, name, parent) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await fetch("http://localhost:3001/category", {
+          method: "PUT",
+          body: JSON.stringify({
+            id,
+            name,
+            parent,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+
+        if (result.status === 400) {
+          let message = "";
+          await result
+            .json()
+            .then((data) => {
+              console.log(data);
+              message = data.message;
+            })
+            .catch(() => {
+              message = "Failed to parse error.";
+            });
+
+          reject(message);
+        }
+
+        resolve("Category edited.");
+      } catch (err) {
+        reject("Failed to edit category.");
+      }
+    });
+  }
+
+  function editPost(id, title, parent, codeblocks) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        codeblocks = JSON.stringify(codeblocks);
+        let result = await fetch("http://localhost:3001/post", {
+          method: "PUT",
+          body: JSON.stringify({
+            id,
+            title,
+            parent,
+            codeblocks,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+
+        if (result.status === 400) {
+          let message = "";
+          await result
+            .json()
+            .then((data) => {
+              message = data.message;
+            })
+            .catch(() => {
+              message = "Failed to parse error.";
+            });
+
+          reject(message);
+        }
+
+        resolve("Post edited.");
+      } catch (err) {
+        reject("Failed to edit post.");
+      }
+    });
+  }
+
   return (
     <EditorMediatorContext.Provider
       value={{
         addCategory,
         addPost,
+        getCategoryById,
         getCategories,
+        getPostById,
         getPosts,
+        editCategory,
+        editPost,
       }}
     >
       {children}

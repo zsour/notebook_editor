@@ -2,8 +2,9 @@ import React, { useState, useReducer, useEffect } from "react";
 import "./style/addPost.css";
 import { Editor, useMonaco } from "@monaco-editor/react";
 import { useEditorMediator } from "./EditorMediator";
+import { useParams } from "react-router-dom";
 
-function AddPost() {
+export default function EditPost() {
   const [loading, setLoading] = useState(true);
 
   const [postTitle, setPostTitle] = useState("");
@@ -17,7 +18,11 @@ function AddPost() {
   const monaco = useMonaco();
   const [codeblocks, dispatch] = useReducer(reducer, []);
 
+  const [categoriesFetched, setCategoriesFetched] = useState(false);
+
   const em = useEditorMediator();
+
+  const { id } = useParams();
 
   useEffect(() => {
     if (monaco) {
@@ -52,15 +57,35 @@ function AddPost() {
             }
           });
 
+          setCategoriesFetched(true);
           setCategories([...data]);
+        })
+        .catch((err) => {
+          console.log(err);
+          window.location.href = "/";
+        });
+    }
+  }, [em]);
+
+  useEffect(() => {
+    if (categoriesFetched) {
+      em.getPostById(id)
+        .then((data) => {
+          dispatch({
+            type: "SET_CODEBLOCKS",
+            value: [...JSON.parse(data[0].codeblocks)],
+          });
+          setPostTitle(data[0].title);
+          setParent(data[0].parent);
           setLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          window.location.href = "/";
           setLoading(false);
         });
     }
-  }, [em]);
+  }, [em, categoriesFetched, id]);
 
   function reducer(current, action) {
     switch (action.type) {
@@ -89,6 +114,10 @@ function AddPost() {
         let tmp = [...current];
         tmp[action.codeblockIndex].extended = action.value;
         return [...tmp];
+      }
+
+      case "SET_CODEBLOCKS": {
+        return [...action.value];
       }
 
       case "RESET": {
@@ -226,12 +255,9 @@ function AddPost() {
           onSubmit={(e) => {
             e.preventDefault();
             setLoading(true);
-            em.addPost(postTitle, parent, codeblocks)
+            em.editPost(id, postTitle, parent, codeblocks)
               .then((message) => {
                 console.log(message);
-                setPostTitle("");
-                setParent("0");
-                dispatch({ type: "RESET" });
                 setLoading(false);
               })
               .catch((err) => {
@@ -271,7 +297,7 @@ function AddPost() {
 
           <div className="addPostFormButtonContainer">
             <button className="addPostFormSubmitButton">
-              <p>Add post</p>
+              <p>Edit post</p>
             </button>
           </div>
         </form>
@@ -281,5 +307,3 @@ function AddPost() {
 
   return renderPage();
 }
-
-export default AddPost;
