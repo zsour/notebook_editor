@@ -7,6 +7,7 @@
 body {
   text-align: center;
   background-color: #14151a;
+  overflow-x: hidden;
 }
 
 .mainContainer {
@@ -24,19 +25,18 @@ body {
   padding-top: 20px;
 }
 
-.navButton{
+.navButton {
   display: inline-block;
   margin-right: 20px;
   height: 20px;
-  line-height: 20px; 
+  line-height: 20px;
   cursor: pointer;
   user-select: none;
   text-decoration: none;
   border: none;
 }
 
-.navButton p{
+.navButton p {
   font-size: 14px;
   color: #c1cddc;
 }
-

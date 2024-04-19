@@ -208,6 +208,21 @@ function AddPost() {
       );
     }
 
+    if (categories.length == 0) {
+      return (
+        <div
+          className="addPostContainer"
+          style={{
+            paddingTop: "30px",
+          }}
+        >
+          <div className="loading">
+            <p>To create a new post you first have to add a new category.</p>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="addPostContainer">
         <div className="addPostButtonContainer">

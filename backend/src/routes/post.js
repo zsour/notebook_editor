@@ -71,4 +71,23 @@ router.put("/", async (req, res) => {
   }
 });
 
+router.delete("/", async (req, res) => {
+  try {
+    if (!req.query.id) {
+      throw "Can't remove post without an id";
+    }
+
+    let id = conn.escape(req.query.id);
+
+    let sql = `DELETE FROM post WHERE ID=${id}`;
+    let result = await conn.query(sql).catch(() => {
+      throw "Could not delete post.";
+    });
+
+    res.json(result[0]);
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+
 module.exports = router;

@@ -4,14 +4,6 @@ export const EditorMediatorContext = React.createContext(null);
 export const useEditorMediator = () => useContext(EditorMediatorContext);
 
 export const EditorMediatorProvider = ({ children }) => {
-  const [posts, setPosts] = useState({});
-
-  useEffect(() => {
-    // read data
-
-    setPosts({});
-  }, []);
-
   function addCategory(name, parent) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -271,6 +263,68 @@ export const EditorMediatorProvider = ({ children }) => {
     });
   }
 
+  function deleteCategory(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await fetch(`http://localhost:3001/category?id=${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+
+        if (result.status === 400) {
+          let message = "";
+          await result
+            .json()
+            .then((data) => {
+              message = data.message;
+            })
+            .catch(() => {
+              message = "Failed to parse error.";
+            });
+
+          reject(message);
+        }
+
+        resolve("Category deleted.");
+      } catch (err) {
+        reject("Failed to delete category.");
+      }
+    });
+  }
+
+  function deletePost(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await fetch(`http://localhost:3001/post?id=${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+
+        if (result.status === 400) {
+          let message = "";
+          await result
+            .json()
+            .then((data) => {
+              message = data.message;
+            })
+            .catch(() => {
+              message = "Failed to parse error.";
+            });
+
+          reject(message);
+        }
+
+        resolve("Post deleted.");
+      } catch (err) {
+        reject("Failed to delete post.");
+      }
+    });
+  }
+
   return (
     <EditorMediatorContext.Provider
       value={{
@@ -282,6 +336,8 @@ export const EditorMediatorProvider = ({ children }) => {
         getPosts,
         editCategory,
         editPost,
+        deleteCategory,
+        deletePost,
       }}
     >
       {children}

@@ -98,4 +98,28 @@ router.put("/", async (req, res) => {
   }
 });
 
+router.delete("/", async (req, res) => {
+  try {
+    if (!req.query.id) {
+      throw "Can't remove category without an id";
+    }
+
+    let id = conn.escape(req.query.id);
+
+    let sql = `DELETE FROM category WHERE ID=${id}`;
+    let result = await conn.query(sql).catch(() => {
+      throw "Could not delete category.";
+    });
+
+    let postSql = `DELETE FROM post WHERE parent=${id}`;
+    await conn.query(postSql).catch(() => {
+      throw "Could not delete associated posts.";
+    });
+
+    res.json(result[0]);
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+
 module.exports = router;

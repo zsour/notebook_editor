@@ -5,47 +5,54 @@ import { useEditorMediator } from "./components/EditorMediator";
 
 function Home() {
   const em = useEditorMediator();
-  const [postsFetched, setPostFetched] = useState(false);
+  const [postsFetched, setPostsFetched] = useState(false);
   const [loading, setLoading] = useState(true);
   const [parentLookup, setParentLookup] = useState({});
 
-  let [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [categoriesFetched, setCategoriesFetched] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(true);
+  const [modal, setModal] = useState(null);
 
   useEffect(() => {
-    setPostFetched(false);
-    setLoading(true);
-    if (em) {
-      em.getCategories()
-        .then((data) => {
-          data.sort((a, b) => {
-            if (a.name > b.name) {
-              return 1;
+    if (!categoriesFetched) {
+      setPostsFetched(false);
+      setLoading(true);
+      if (em) {
+        em.getCategories()
+          .then((data) => {
+            data.sort((a, b) => {
+              if (a.name > b.name) {
+                return 1;
+              }
+
+              return -1;
+            });
+            let lookup = {};
+            for (let i = 0; i < data.length; i++) {
+              data[i].posts = [];
+              lookup[data[i].ID] = i;
             }
 
-            return -1;
+            setParentLookup({ ...lookup });
+            setCategories([...data]);
+            setCategoriesFetched(true);
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log(err);
           });
-          let lookup = {};
-          for (let i = 0; i < data.length; i++) {
-            data[i].posts = [];
-            lookup[data[i].ID] = i;
-          }
-
-          setParentLookup({ ...lookup });
-          setCategories([...data]);
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.log(err);
-        });
+      }
     }
-  }, [em]);
+  }, [em, categoriesFetched]);
 
   useEffect(() => {
-    if (categories.length > 0 && !postsFetched && em) {
+    if (categoriesFetched && !postsFetched && em) {
       setLoading(true);
       em.getPosts()
         .then((data) => {
-          setPostFetched(true);
+          setPostsFetched(true);
           data.sort((a, b) => {
             if (a.title > b.title) {
               return 1;
@@ -68,7 +75,7 @@ function Home() {
           setLoading(false);
         });
     }
-  }, [categories, postsFetched, em, parentLookup]);
+  }, [categories, postsFetched, em, parentLookup, categoriesFetched]);
 
   function renderCategories() {
     let jsx = [];
@@ -78,7 +85,28 @@ function Home() {
           <div className="categoryHeader">
             <p className="categoryTitle">{categories[i].name}</p>
 
-            <span className="categoryRemoveButton"></span>
+            <span
+              className="categoryRemoveButton"
+              onClick={() => {
+                createModal(
+                  `Are you sure you want to delete the category "${categories[i].name}" and all of its entries?`,
+
+                  () => {
+                    setLoading(true);
+                    setModalOpen(false);
+                    em.deleteCategory(categories[i].ID)
+                      .then((message) => {
+                        setCategoriesFetched(false);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        setLoading(false);
+                      });
+                  },
+                );
+                setModalOpen(true);
+              }}
+            ></span>
             <a href={`./editCategory/${categories[i].ID}`}>
               <span className="categoryEditButton"></span>
             </a>
@@ -100,7 +128,29 @@ function Home() {
       jsx.push(
         <div key={`post_${posts[i].ID}`} className="categoryPost">
           <p className="categoryPostTitle">{posts[i].title}</p>
-          <span className="categoryPostRemoveButton"></span>
+          <span
+            className="categoryPostRemoveButton"
+            onClick={() => {
+              setLoading(true);
+              setModalOpen(false);
+              createModal(
+                `Are you sure you want to delete the post "${posts[i].title}"?`,
+                () => {
+                  setLoading(true);
+                  setModalOpen(false);
+                  em.deletePost(posts[i].ID)
+                    .then((message) => {
+                      setCategoriesFetched(false);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      setLoading(false);
+                    });
+                },
+              );
+              setModalOpen(true);
+            }}
+          ></span>
           <a href={`./editPost/${posts[i].ID}`}>
             <span className="categoryPostEditButton"></span>
           </a>
@@ -108,6 +158,57 @@ function Home() {
       );
     }
     return jsx;
+  }
+
+  function createModal(question, callback) {
+    setModal(
+      <div className="modalContainer">
+        <span
+          className="modalBackground"
+          onClick={() => {
+            setModalOpen((prev) => !prev);
+          }}
+        ></span>
+
+        <div className="modal">
+          <div className="modalHeader">
+            <p>Confirmation</p>
+          </div>
+          <div className="modalQuestionContainer">
+            <p>{question}</p>
+          </div>
+
+          <div className="modalButtonContainer">
+            <div
+              className="modalButton"
+              style={{
+                backgroundColor: "#393f4f",
+              }}
+              onClick={() => {
+                setModalOpen(false);
+              }}
+            >
+              <p>No</p>
+            </div>
+
+            <div
+              className="modalButton"
+              onClick={() => {
+                callback();
+              }}
+            >
+              <p>Yes</p>
+            </div>
+          </div>
+        </div>
+      </div>,
+    );
+  }
+
+  function renderModal() {
+    if (modalOpen) {
+      return modal;
+    }
   }
 
   function renderPage() {
@@ -121,10 +222,25 @@ function Home() {
       );
     }
 
+    if (categories.length == 0) {
+      return (
+        <div className="categoryContainer">
+          <div className="loading">
+            <p>No categories exist right now.</p>
+          </div>
+        </div>
+      );
+    }
+
     return <div className="categoryContainer">{renderCategories()}</div>;
   }
 
-  return <>{renderPage()}</>;
+  return (
+    <>
+      {renderPage()}
+      {renderModal()}
+    </>
+  );
 }
 
 export default Home;
