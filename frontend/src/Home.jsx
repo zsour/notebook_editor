@@ -232,7 +232,27 @@ function Home() {
       );
     }
 
-    return <div className="categoryContainer">{renderCategories()}</div>;
+    return (
+      <>
+        <div className="categoryContainer">{renderCategories()}</div>
+        <div
+          className="bottomButtonContainer"
+          onClick={() => {
+            em.exportToFile()
+              .then((message) => {
+                console.log(message);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }}
+        >
+          <div className="button">
+            <p>Export to JSON</p>
+          </div>
+        </div>
+      </>
+    );
   }
 
   return (

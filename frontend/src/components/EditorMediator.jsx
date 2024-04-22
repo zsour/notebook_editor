@@ -325,6 +325,51 @@ export const EditorMediatorProvider = ({ children }) => {
     });
   }
 
+  function exportToFile() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await fetch(`http://localhost:3001/export`, {
+          method: "GET",
+        });
+
+        if (result.status === 400) {
+          let message = "";
+          await result
+            .json()
+            .then((data) => {
+              message = data.message;
+            })
+            .catch(() => {
+              message = "Failed to export data.";
+            });
+
+          reject(message);
+        } else {
+          result
+            .json()
+            .then((data) => {
+              const url = window.URL.createObjectURL(
+                new Blob([JSON.stringify(data)]),
+              );
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", "data.json");
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+            })
+            .catch(() => {
+              throw "Could not parse data to JSON.";
+            });
+        }
+
+        resolve("Data exported.");
+      } catch (err) {
+        reject("Failed to export data.");
+      }
+    });
+  }
+
   return (
     <EditorMediatorContext.Provider
       value={{
@@ -338,6 +383,7 @@ export const EditorMediatorProvider = ({ children }) => {
         editPost,
         deleteCategory,
         deletePost,
+        exportToFile,
       }}
     >
       {children}
