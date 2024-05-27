@@ -150,7 +150,7 @@ function AddPost() {
 
           <Editor
             className="codeblockCode"
-            defaultLanguage="javascript"
+            defaultLanguage="cpp"
             height="500px"
             theme="arta"
             options={{
