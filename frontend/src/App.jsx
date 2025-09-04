@@ -3,7 +3,7 @@ import "./components/style/home.css";
 
 import { useEditorMediator } from "./components/EditorMediator";
 
-function Home() {
+function App() {
   const em = useEditorMediator();
   const [postsFetched, setPostsFetched] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -263,4 +263,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default App;

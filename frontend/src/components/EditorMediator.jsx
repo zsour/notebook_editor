@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 export const EditorMediatorContext = React.createContext(null);
 
 export const useEditorMediator = () => useContext(EditorMediatorContext);
@@ -319,7 +319,7 @@ export const EditorMediatorProvider = ({ children }) => {
         }
 
         resolve("Post deleted.");
-      } catch (err) {
+      } catch (_) {
         reject("Failed to delete post.");
       }
     });
@@ -364,7 +364,7 @@ export const EditorMediatorProvider = ({ children }) => {
         }
 
         resolve("Data exported.");
-      } catch (err) {
+      } catch (_) {
         reject("Failed to export data.");
       }
     });

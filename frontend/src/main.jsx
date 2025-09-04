@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Home from "./Home";
+import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { EditorMediatorProvider } from "./components/EditorMediator";
 import "./style.css";
@@ -13,7 +13,7 @@ import EditCategory from "./components/EditCategory";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <App />,
   },
 
   {
